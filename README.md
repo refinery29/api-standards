@@ -1,7 +1,6 @@
-# White House Web API Standards
+# Refinery29 API Standards
 
-* [Guidelines](#guidelines)
-* [Pragmatic REST](#pragmatic-rest)
+* [Introduction](#introduction)
 * [RESTful URLs](#restful-urls)
 * [HTTP Verbs](#http-verbs)
 * [Responses](#responses)
@@ -12,23 +11,13 @@
 * [Mock Responses](#mock-responses)
 * [JSONP](#jsonp)
 
-## Guidelines
+## Introduction
 
-This document provides guidelines and examples for White House Web APIs, encouraging consistency, maintainability, and best practices across applications. White House APIs aim to balance a truly RESTful API interface with a positive developer experience (DX).
+This document provides guidelines and examples for Refinery 29 APIs, encouraging consistency, maintainability, and best practices across applications. 
 
 This document borrows heavily from:
-* [Designing HTTP Interfaces and RESTful Web Services](https://www.youtube.com/watch?v=zEyg0TnieLg)
-* [API Facade Pattern](http://apigee.com/about/resources/ebooks/api-fa%C3%A7ade-pattern), by Brian Mulloy, Apigee
-* [Web API Design](http://pages.apigee.com/web-api-design-ebook.html), by Brian Mulloy, Apigee
-* [Fielding's Dissertation on REST](http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm)
-
-## Pragmatic REST
-
-These guidelines aim to support a truly RESTful API. Here are a few exceptions:
-* Put the version number of the API in the URL (see examples below). Don’t accept any requests that do not specify a version number.
-* Allow users to request formats like JSON or XML like this:
-    * http://example.gov/api/v1/magazines.json
-    * http://example.gov/api/v1/magazines.xml
+* [White House API Standards](https://github.com/WhiteHouse/api-standards)
+* [Phil Sturgeon](https://speakerdeck.com/philsturgeon/api-pain-points-confoo-2015)
 
 ## RESTful URLs
 
