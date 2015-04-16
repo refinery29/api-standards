@@ -1,5 +1,7 @@
 # Refinery29 API Standards
 
+**TODO:** (last) Update TOC
+
 * [Introduction](#introduction)
 * [RESTful URLs](#restful-urls)
 * [HTTP Verbs](#http-verbs)
@@ -24,61 +26,105 @@ This document borrows heavily from:
 ### General guidelines for RESTful URLs
 * A URL identifies a resource.
 * URLs should include nouns, not verbs.
-* Use plural nouns only for consistency (no singular nouns).
-* Use HTTP verbs (GET, POST, PUT, DELETE) to operate on the collections and elements.
-* You shouldn’t need to go deeper than resource/identifier/resource.
-* Put the version number at the base of your URL, for example http://example.com/v1/path/to/resource.
+* Use **plural nouns** only (no singular nouns).
+	* Plural-only makes URLs consistent.
+	* Plural english nouns can be hurdle for developers who's first language isn't english. `/people` vs `/person/1234`
+* Use HTTP verbs (GET, POST, PUT, DELETE, PATCH) to operate on the collections and elements.
+   * Yes, you should support PATCH. More on that below. 
 * URL v. header:
     * If it changes the logic you write to handle the response, put it in the URL.
-    * If it doesn’t change the logic for each response, like OAuth info, put it in the header.
+    * If it doesn’t change the logic for each response, like authorization info, put it in the header.
 * Specify optional fields in a comma separated list.
+    * **TODO:** should we mandate a `?fields=` for this? 
+* Always return JSON by default. 
+    * If you support XML responses, add `.xml` to the resource to enable it.
+ 
+**TODO:** where should version numbers go? How should url namespaces be formed. We currently have:
+
+ * [... API v1 Example]
+ * http://www.refinery29.com/api/2/feeds/
+ * http://www.refinery29.com/shops/api/1/...
+ * http://www.refinery29.com/shops/rf29json/...
+ * https://dash.refinery29.com/dashapi/entries/{id}/assets
+     * https://dash.refinery29.com/dashapi/entry-assets/<id> # alias for ^
+
+Suggestion going forward?:
+
+ * `https://dash.refinery29.com/api/0/...`  
+    OK to not have namespace with the subdomain.
+ * `http://www.refinery29.com/api/content/2/...` # Feed
+ * `http://www.refinery29.com/api/content/3/...` # Content API v3
+ * `http://www.refinery29.com/api/shops/1/...`
+ * `http://www.refinery29.com/api/login/1/...`
+
+Whitehouse says:
+
+* You shouldn’t need to go deeper than resources/<#identifier>/resources.
+* Put the version number at the base of your URL, for example http://example.com/1/path/to/resource.
 * Formats should be in the form of api/v2/resource/{id}.json
 
+
 ### Good URL examples
-* List of magazines:
-    * GET http://www.example.gov/api/v1/magazines.json
+
+* List of entries:
+    * `GET http://www.refinery29.com/api/content/1/entries`
 * Filtering is a query:
-    * GET http://www.example.gov/api/v1/magazines.json?year=2011&sort=desc
-    * GET http://www.example.gov/api/v1/magazines.json?topic=economy&year=2011
-* A single magazine in JSON format:
-    * GET http://www.example.gov/api/v1/magazines/1234.json
-* All articles in (or belonging to) this magazine:
-    * GET http://www.example.gov/api/v1/magazines/1234/articles.json
-* All articles in this magazine in XML format:
-    * GET http://example.gov/api/v1/magazines/1234/articles.xml
+    * `GET http://www.refinery29.com/api/content/1/entries?year=2011&sort=desc`
+    * `GET http://www.refinery29.com/api/content/1/entries?topic=economy&year=2011`
+* A single entry in JSON format:
+    * `GET http://www.refinery29.com/api/content/1/entries/1234`
+* All assets in (or belonging to) this entry:
+    * `GET http://www.refinery29.com/api/content/1/entries/1234/assets`
 * Specify optional fields in a comma separated list:
-    * GET http://www.example.gov/api/v1/magazines/1234.json?fields=title,subtitle,date
-* Add a new article to a particular magazine:
-    * POST http://example.gov/api/v1/magazines/1234/articles
+    * `GET http://www.refinery29.com/api/1/content/1/entries/1234?fields=title,subtitle,date`
+* Add a new article to a particular entry:
+    * `POST http://www.refinery29.com/api/content/1/entries/1234/articles`
 
 ### Bad URL examples
 * Non-plural noun:
-    * http://www.example.gov/magazine
-    * http://www.example.gov/magazine/1234
-    * http://www.example.gov/publisher/magazine/1234
+    * http://www.refinery29.com/api/content/1/entry
+    * http://www.refinery29.com/api/content/1/entry/1234
+    * http://www.refinery29.com/api/content/1/publisher/magazine/1234
 * Verb in URL:
-    * http://www.example.gov/magazine/1234/create
+    * http://www.refinery29.com/api/content/1/magazine/1234/create
 * Filter outside of query string
-    * http://www.example.gov/magazines/2011/desc
+    * http://www.refinery29.com/api/content/1/magazines/2011/desc
 
 ## HTTP Verbs
 
 HTTP verbs, or methods, should be used in compliance with their definitions under the [HTTP/1.1](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) standard.
-The action taken on the representation will be contextual to the media type being worked on and its current state. Here's an example of how HTTP verbs map to create, read, update, delete operations in a particular context:
 
-| HTTP METHOD | POST            | GET       | PUT         | DELETE |
-| ----------- | --------------- | --------- | ----------- | ------ |
-| CRUD OP     | CREATE          | READ      | UPDATE      | DELETE |
-| /dogs       | Create new dogs | List dogs | Bulk update | Delete all dogs |
-| /dogs/1234  | Error           | Show Bo   | If exists, update Bo; If not, error | Delete Bo |
+The action taken on the representation will be contextual to the media type being worked on and its current state. Here's are some examples of how HTTP verbs map in a particular context:
 
-(Example from Web API Design, by Brian Mulloy, Apigee.)
+Remember: REST isn't the same model as CRUD. We've included some equivalents below, but if you're thinking in terms of Relational Database CRUD, you're probably going to end up with a poorly-designed RESTful API.
+
+| METHOD | ENDPOINT | CRUD Equivalent | Notes | 
+| ------ | -------- | --------------- | ----- |
+| GET | /users | -- | List Users. |
+| GET | /users/1234 | READ | Retrieve one user record. |
+| PUT | /users/1234 | UPDATE | Update one user record. Use this when your payload includes all the fields. |
+| PATCH* | /users/1234 | UPDATE | Update one user record. Use this when your payload only includes fields to change. |
+| POST | /users | CREATE | Create a new user record. |
+| DELETE | /users/12 | DELETE | Delete a user record. |
+
+\* PATCH isn't widely supported in browsers. You can accept a ?method=PATCH param on a POST request to emulate it for JS clients.
+
+Phil Sturgeon recommends these methods for uploading images:
+
+| METHOD | ENDPOINT | CRUD Equivalent | Notes | 
+| ------ | -------- | --------------- | ----- |
+| PUT | /users/12/image | -- | Upload an image for the user (when the user can only have one image)** |
+| POST | /users/12/images | CREATE | Upload an image for the user (when the user can have multiple images)** |
+
+
+\** For images, pay attention to the content type on the request. Allow both: 
+ * `application/json`: JSON payload with a URL of the image to upload
+ * `image/___`: Image data to upload
 
 
 ## Responses
 
 * No values in keys
-* No internal-specific names (e.g. "node" and "taxonomy term")
 * Metadata should only contain direct properties of the response set, not properties of the members of the response set
 
 ### Good examples
@@ -101,7 +147,11 @@ Values in keys:
     ],
 
 
+**TODO:** We differe in how we wrap or don't wrap responses. DASH always wraps in a `{'results': ...}`. Shops/Rockethip only wraps for lists, and uses the resource name as the key. Login/Monorail never wraps.
+
 ## Error handling
+
+#### Obama Says
 
 Error responses should include a common HTTP status code, message for the developer, message for the end-user (when appropriate), internal error code (corresponding to some specific internally determined ID), links where developers can find more info. For example:
 
@@ -116,21 +166,34 @@ Error responses should include a common HTTP status code, message for the develo
     }
 
 Use three simple, common response codes indicating (1) success, (2) failure due to client-side problem, (3) failure due to server-side problem:
+
 * 200 - OK
 * 400 - Bad Request
 * 500 - Internal Server Error
+
+#### Phil Says
+
+* Use HTTP Error Codes
+* Return multiple errors when things go wrong.
+* Phil recommends following http://jsonapi.org/format/#errors
+Including a very specific code and a URL to your docs for that error is very helpful
+* R29 Takeaways: We have a lot to learn here, there's not much consistency in error messages across our APIs. These are good tips.
+
+**TODO:** Work on this!
 
 
 ## Versions
 
 * Never release an API without a version number.
-* Versions should be integers, not decimal numbers, prefixed with ‘v’. For example:
-    * Good: v1, v2, v3
-    * Bad: v-1.1, v1.2, 1.3
-* Maintain APIs at least one version back.
-
+* Versions should be integers, not decimal numbers, with no prefix. For example:
+    * Good: 1, 2, 3
+    * Bad: v1, 1.1, v1.2, v-1.3
+* The version number goes between the api namespace and the resource location.
+* Manage past API versions. Know what's being consumed and deprecate responsibly.
 
 ## Record limits
+
+#### Obama Says
 
 * If no limit is specified, return results with a default limit.
 * To get records 51 through 75 do this:
@@ -151,134 +214,67 @@ Information about record limits and total available count should also be include
         "results": []
     }
 
+#### Phil Says
+
+Phil recommends cursors over pages, limits, offsets, etc.
+
+R29 Takeaways: We think this is brilliant too. Cursors could be stored in redis or Aerospike depending on the platform.
+
 ## Request & Response Examples
 
-### API Resources
-
-  - [GET /magazines](#get-magazines)
-  - [GET /magazines/[id]](#get-magazinesid)
-  - [POST /magazines/[id]/articles](#post-magazinesidarticles)
-
-### GET /magazines
-
-Example: http://example.gov/api/v1/magazines.json
-
-Response body:
-
-    {
-        "metadata": {
-            "resultset": {
-                "count": 123,
-                "offset": 0,
-                "limit": 10
-            }
-        },
-        "results": [
-            {
-                "id": "1234",
-                "type": "magazine",
-                "title": "Public Water Systems",
-                "tags": [
-                    {"id": "125", "name": "Environment"},
-                    {"id": "834", "name": "Water Quality"}
-                ],
-                "created": "1231621302"
-            },
-            {
-                "id": 2351,
-                "type": "magazine",
-                "title": "Public Schools",
-                "tags": [
-                    {"id": "125", "name": "Elementary"},
-                    {"id": "834", "name": "Charter Schools"}
-                ],
-                "created": "126251302"
-            }
-            {
-                "id": 2351,
-                "type": "magazine",
-                "title": "Public Schools",
-                "tags": [
-                    {"id": "125", "name": "Pre-school"},
-                ],
-                "created": "126251302"
-            }
-        ]
-    }
-
-### GET /magazines/[id]
-
-Example: http://example.gov/api/v1/magazines/[id].json
-
-Response body:
-
-    {
-        "id": "1234",
-        "type": "magazine",
-        "title": "Public Water Systems",
-        "tags": [
-            {"id": "125", "name": "Environment"},
-            {"id": "834", "name": "Water Quality"}
-        ],
-        "created": "1231621302"
-    }
-
-
-
-### POST /magazines/[id]/articles
-
-Example: Create – POST  http://example.gov/api/v1/magazines/[id]/articles
-
-Request body:
-
-    [
-        {
-            "title": "Raising Revenue",
-            "author_first_name": "Jane",
-            "author_last_name": "Smith",
-            "author_email": "jane.smith@example.gov",
-            "year": "2012",
-            "month": "August",
-            "day": "18",
-            "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eget ante ut augue scelerisque ornare. Aliquam tempus rhoncus quam vel luctus. Sed scelerisque fermentum fringilla. Suspendisse tincidunt nisl a metus feugiat vitae vestibulum enim vulputate. Quisque vehicula dictum elit, vitae cursus libero auctor sed. Vestibulum fermentum elementum nunc. Proin aliquam erat in turpis vehicula sit amet tristique lorem blandit. Nam augue est, bibendum et ultrices non, interdum in est. Quisque gravida orci lobortis... "
-        }
-    ]
+**TODO:** Write some of these once we nail the other details down.
 
 
 ## Mock Responses
+
+#### Obama Says
+
+**TODO:** Is this a good idea? Chassis could be written to do this with the same metadata we use to build the docs?
+
 It is suggested that each resource accept a 'mock' parameter on the testing server. Passing this parameter should return a mock data response (bypassing the backend).
 
 Implementing this feature early in development ensures that the API will exhibit consistent behavior, supporting a test driven development methodology.
 
-Note: If the mock parameter is included in a request to the production environment, an error should be raised.
-
+**Note:** If the mock parameter is included in a request to the production environment, an error should be raised.
 
 ## JSONP
 
-JSONP is easiest explained with an example. Here's one from [StackOverflow](http://stackoverflow.com/questions/2067472/what-is-jsonp-all-about?answertab=votes#tab-top):
+Consider carefully whether your endpoint should support JSONP, there are security implications.) 
 
-> Say you're on domain abc.com, and you want to make a request to domain xyz.com. To do so, you need to cross domain boundaries, a no-no in most of browserland.
+If you do, support both `?callback=` and `?jsonp=` to enable JSONP wrappers in the response. 
 
-> The one item that bypasses this limitation is `<script>` tags. When you use a script tag, the domain limitation is ignored, but under normal circumstances, you can't really DO anything with the results, the script just gets evaluated.
+## Authentication
 
-> Enter JSONP. When you make your request to a server that is JSONP enabled, you pass a special parameter that tells the server a little bit about your page. That way, the server is able to nicely wrap up its response in a way that your page can handle.
+**TODO:** Flesh this out
 
-> For example, say the server expects a parameter called "callback" to enable its JSONP capabilities. Then your request would look like:
+* Anything public-facing should be OAuth2 for sure.
+* Monorail could become an OAuth2 provider pretty easily.
+* Dash could use OAuth2, against either monorail or Google accounts. (Matt M: talk with IT about SSO)
+* We're not sure about internal service<->service API calls where we're currently using API Keys.
 
->         http://www.xyz.com/sample.aspx?callback=mycallback
 
-> Without JSONP, this might return some basic javascript object, like so:
+## Automated Testing
 
->         { foo: 'bar' }
+ > "If you don't automate your testing, you don't have testing."  
+ > -- Phil Sturgeon
 
-> However, with JSONP, when the server receives the "callback" parameter, it wraps up the result a little differently, returning something like this:
+**TODO:** Flesh this out
 
->         mycallback({ foo: 'bar' });
+ * Dredd for testing documentation
+ * Integration/Acceptance testing that hits the endpoints
+ * Thorough unit testing
 
-> As you can see, it will now invoke the method you specified. So, in your page, you define the callback function:
+## IDs
 
->         mycallback = function(data){
->             alert(data.foo);
->         };
+**TODO:** Flesh this out
 
-http://stackoverflow.com/questions/2067472/what-is-jsonp-all-about?answertab=votes#tab-top
+* **Phil Says:** UUID/GUIDs are better than auto-incrementing values
+* R29 Takeaway: We agree, sometimes. Monorail already exposes UUIDs for users. We're not sure it has the same advantages for entries, etc. but it's worth talking about.
+
+## Embedding Resources
+
+**TODO:** Flesh this out
+
+ * **Phil Says** Phil recommends implementing a ?include=____ parameter to embed the data for linked resources.
+ * `?include=` for fields to "follow" (include object rather than id)
+
