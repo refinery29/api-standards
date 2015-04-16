@@ -1,17 +1,29 @@
 # Refinery29 API Standards
 
-**TODO:** (last) Update TOC
+----
+
+Hi. This API standards document is a work in progress. To contribute, please make a Pull Request recommending changes. We'll discuss PR's as a community and decide together which to incorporate.
+
+Please limit PRs to one "idea." For example, if you want to update the "Error Handling" section with a suggestion for error codes, and the "HTTP Verbs" section to advocate for a new verb usage, please make two separate PRs.
+
+----
 
 * [Introduction](#introduction)
 * [RESTful URLs](#restful-urls)
+* [Content Type](#content-type)
+* [URL Structure and Versioning](#url-structure-and-versioning)
 * [HTTP Verbs](#http-verbs)
 * [Responses](#responses)
-* [Error handling](#error-handling)
-* [Versions](#versions)
-* [Record limits](#record-limits)
+* [Error Handling](#error-handling)
+* [Pagination](#pagination)
 * [Request & Response Examples](#request--response-examples)
 * [Mock Responses](#mock-responses)
 * [JSONP](#jsonp)
+* [Automated Testing](#automated-testing)
+* [Authentication](#authentication)
+* [Documentation](#documentation)
+* [IDs](#ids)
+* [Embedding Resources](#embedding-resources)
 
 ## Introduction
 
@@ -20,6 +32,13 @@ This document provides guidelines and examples for Refinery 29 APIs, encouraging
 This document borrows heavily from:
 * [White House API Standards](https://github.com/WhiteHouse/api-standards)
 * [Phil Sturgeon](https://speakerdeck.com/philsturgeon/api-pain-points-confoo-2015)
+
+These are *pragmatic* guidelines. We think this is the best way for Refinery29 to build quality, consistent APIs. However:
+
+ * We don't think all of these guidelines should be applied retroactively to existing APIs and endpoints. Please apply the guidelines as you can as you're writing new code. If you starting a new API version, you should follow the guidelines strictly. But we're not advocating a bunch of breaking changes to content API v1 at the expense of business objectives!
+ * You may need to deviate from these guidelines, even in a pristine, new codebase. That's OK, provided that 
+   1. You have very good reasons for doing so. You should understand why the guideline you're breaking was put in place, and be able to articulate why that scenario doesn't apply to your situation. If your "break" is an improvement that could apply to all APIs, consider proposing a change to the standards.
+   2. Your team has reached a consensus regarding the "break". Deviating from the guidelines isn't something a one or two engineers (even leads or architects!) should do alone.
 
 ## RESTful URLs
 
@@ -36,33 +55,32 @@ This document borrows heavily from:
     * If it doesn’t change the logic for each response, like authorization info, put it in the header.
 * Specify optional fields in a comma separated list.
     * **TODO:** should we mandate a `?fields=` for this? 
-* Always return JSON by default. 
-    * If you support XML responses, add `.xml` to the resource to enable it.
- 
-**TODO:** where should version numbers go? How should url namespaces be formed. We currently have:
 
- * [... API v1 Example]
- * http://www.refinery29.com/api/2/feeds/
- * http://www.refinery29.com/shops/api/1/...
- * http://www.refinery29.com/shops/rf29json/...
- * https://dash.refinery29.com/dashapi/entries/{id}/assets
-     * https://dash.refinery29.com/dashapi/entry-assets/<id> # alias for ^
+## Content Type
 
-Suggestion going forward?:
+* Always support JSON and return JSON by default. 
+* Use `Content-Type` headers on the request to specify different response types, such as XML.
 
- * `https://dash.refinery29.com/api/0/...`  
-    OK to not have namespace with the subdomain.
- * `http://www.refinery29.com/api/content/2/...` # Feed
+## URL Structure and Versioning
+
+* Never release an API without a version number.
+* Versions should be integers, not decimal numbers, with no prefix. For example:
+    * Good: `1`, `2`, `3`
+    * Bad: `v1`, `1.1`, `v1.2`, `v-1.3`, `foo`, `XVII`
+* The version number goes between the api namespace and the resource location.
+* Manage past API versions. Know what's being consumed and deprecate responsibly.
+* You shouldn’t need to go deeper than resources/<#identifier>/resources.
+
+Going forward, API urls should be in the format:
+
+ * `http://www.refinery29.com/api/feed/2/...`
  * `http://www.refinery29.com/api/content/3/...` # Content API v3
  * `http://www.refinery29.com/api/shops/1/...`
  * `http://www.refinery29.com/api/login/1/...`
+ * `https://dash.refinery29.com/api/0/...`
+    OK to not have namespace with the subdomain.
 
-Whitehouse says:
-
-* You shouldn’t need to go deeper than resources/<#identifier>/resources.
-* Put the version number at the base of your URL, for example http://example.com/1/path/to/resource.
-* Formats should be in the form of api/v2/resource/{id}.json
-
+In the future, we may pursue putting APIs on a subdomain.
 
 ### Good URL examples
 
@@ -105,52 +123,59 @@ Remember: REST isn't the same model as CRUD. We've included some equivalents bel
 | PUT | /users/1234 | UPDATE | Update one user record. Use this when your payload includes all the fields. |
 | PATCH* | /users/1234 | UPDATE | Update one user record. Use this when your payload only includes fields to change. |
 | POST | /users | CREATE | Create a new user record. |
-| DELETE | /users/12 | DELETE | Delete a user record. |
+| DELETE | /users/1234 | DELETE | Delete a user record. |
 
-\* PATCH isn't widely supported in browsers. You can accept a ?method=PATCH param on a POST request to emulate it for JS clients.
+\* PATCH isn't widely supported in browsers. You can accept a `?method=PATCH` param on a POST request to emulate it for JS clients.
 
 Phil Sturgeon recommends these methods for uploading images:
 
 | METHOD | ENDPOINT | CRUD Equivalent | Notes | 
 | ------ | -------- | --------------- | ----- |
-| PUT | /users/12/image | -- | Upload an image for the user (when the user can only have one image)** |
-| POST | /users/12/images | CREATE | Upload an image for the user (when the user can have multiple images)** |
+| PUT | /users/12/image* | -- | Upload an image for the user (when the user can only have one image) |
+| POST | /users/12/images | CREATE | Upload an image for the user (when the user can have multiple images) |
 
+\* Note the use of a singular noun when we're providing direct access to an attribute that has a 1:1 relationship with a resource.
 
-\** For images, pay attention to the content type on the request. Allow both: 
+For images, pay attention to the content type on the request. Allow both: 
+ * `image/png`, `image/jpeg`: Image data to upload
  * `application/json`: JSON payload with a URL of the image to upload
- * `image/___`: Image data to upload
 
 
 ## Responses
 
-* No values in keys
-* Metadata should only contain direct properties of the response set, not properties of the members of the response set
+ * Don't repeat HTTP response codes (normal or error cases!) in the body.
+ * Don't include a 'status', 'message', etc. at the top level.
+ * DO use a top-level key "result" to wrap the returned data.
+ * No values in keys
 
-### Good examples
+   * **Good example:** No values in keys:
 
-No values in keys:
-
+	```
     "tags": [
       {"id": "125", "name": "Environment"},
       {"id": "834", "name": "Water Quality"}
     ],
+    ``` 
 
+   * **Bad example:** Values in keys:
 
-### Bad examples
-
-Values in keys:
-
+    ```
     "tags": [
       {"125": "Environment"},
       {"834": "Water Quality"}
     ],
+    ```
 
+ 
+ * Metadata should only contain direct properties of the response set, not properties of the members of the response set
 
-**TODO:** We differe in how we wrap or don't wrap responses. DASH always wraps in a `{'results': ...}`. Shops/Rockethip only wraps for lists, and uses the resource name as the key. Login/Monorail never wraps.
 
 ## Error handling
 
+**TODO:** Please submit PR's to improve this section.
+
+```
+Draft:
 #### Obama Says
 
 Error responses should include a common HTTP status code, message for the developer, message for the end-user (when appropriate), internal error code (corresponding to some specific internally determined ID), links where developers can find more info. For example:
@@ -180,18 +205,14 @@ Including a very specific code and a URL to your docs for that error is very hel
 * R29 Takeaways: We have a lot to learn here, there's not much consistency in error messages across our APIs. These are good tips.
 
 **TODO:** Work on this!
+```
 
+## Pagination
 
-## Versions
+**TODO:** Please submit PR's to improve this section.
 
-* Never release an API without a version number.
-* Versions should be integers, not decimal numbers, with no prefix. For example:
-    * Good: 1, 2, 3
-    * Bad: v1, 1.1, v1.2, v-1.3
-* The version number goes between the api namespace and the resource location.
-* Manage past API versions. Know what's being consumed and deprecate responsibly.
-
-## Record limits
+```
+Draft:
 
 #### Obama Says
 
@@ -219,13 +240,36 @@ Information about record limits and total available count should also be include
 Phil recommends cursors over pages, limits, offsets, etc.
 
 R29 Takeaways: We think this is brilliant too. Cursors could be stored in redis or Aerospike depending on the platform.
+```
 
 ## Request & Response Examples
 
 **TODO:** Write some of these once we nail the other details down.
 
+```
+200 OK
+
+{
+   'result': [..., ]
+		// metadata .. can include pagination, etc.
+}
+```
+ 
+```
+401 Bad Request
+ 
+{
+   'errors`: [...]
+}
+```
+
 
 ## Mock Responses
+
+**TODO:** Please submit PR's to improve this section.
+
+```
+Draft:
 
 #### Obama Says
 
@@ -236,6 +280,7 @@ It is suggested that each resource accept a 'mock' parameter on the testing serv
 Implementing this feature early in development ensures that the API will exhibit consistent behavior, supporting a test driven development methodology.
 
 **Note:** If the mock parameter is included in a request to the production environment, an error should be raised.
+```
 
 ## JSONP
 
@@ -245,36 +290,61 @@ If you do, support both `?callback=` and `?jsonp=` to enable JSONP wrappers in t
 
 ## Authentication
 
-**TODO:** Flesh this out
+**TODO:** Please submit PR's to improve this section.
+
+```
+Draft:
 
 * Anything public-facing should be OAuth2 for sure.
 * Monorail could become an OAuth2 provider pretty easily.
 * Dash could use OAuth2, against either monorail or Google accounts. (Matt M: talk with IT about SSO)
 * We're not sure about internal service<->service API calls where we're currently using API Keys.
 
+```
 
 ## Automated Testing
 
  > "If you don't automate your testing, you don't have testing."  
  > -- Phil Sturgeon
 
-**TODO:** Flesh this out
+**TODO:** Please submit PR's to improve this section.
+
+```
+Draft:
 
  * Dredd for testing documentation
  * Integration/Acceptance testing that hits the endpoints
  * Thorough unit testing
+```
+
+## Documentation
+
+**TODO:** Please submit PR's to improve this section.
+
+```
+Draft:
+
+There's nothing here.
+```
 
 ## IDs
 
-**TODO:** Flesh this out
+**TODO:** Please submit PR's to improve this section.
+
+```
+Draft:
 
 * **Phil Says:** UUID/GUIDs are better than auto-incrementing values
 * R29 Takeaway: We agree, sometimes. Monorail already exposes UUIDs for users. We're not sure it has the same advantages for entries, etc. but it's worth talking about.
+```
 
 ## Embedding Resources
 
-**TODO:** Flesh this out
+**TODO:** Please submit PR's to improve this section.
+
+```
+Draft:
 
  * **Phil Says** Phil recommends implementing a ?include=____ parameter to embed the data for linked resources.
  * `?include=` for fields to "follow" (include object rather than id)
-
+```
