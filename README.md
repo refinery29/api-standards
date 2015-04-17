@@ -6,6 +6,8 @@ Hi. This API standards document is a work in progress. To contribute, please mak
 
 Please limit PRs to one "idea." For example, if you want to update the "Error Handling" section with a suggestion for error codes, and the "HTTP Verbs" section to advocate for a new verb usage, please make two separate PRs.
 
+If your idea isn't well-formed enough for a PR, feel free to open an Issue on this Github repo. We'll discuss it and figure out what changes to make.
+
 ----
 
 * [Introduction](#introduction)
