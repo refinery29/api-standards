@@ -270,21 +270,12 @@ R29 Takeaways: We think this is brilliant too. Cursors could be stored in redis 
 
 ## Mock Responses
 
-**TODO:** Please submit PR's to improve this section.
-
-```
-Draft:
-
-#### Obama Says
-
-**TODO:** Is this a good idea? Chassis could be written to do this with the same metadata we use to build the docs?
-
-It is suggested that each resource accept a 'mock' parameter on the testing server. Passing this parameter should return a mock data response (bypassing the backend).
+It is suggested that each resource accept a 'mock' parameter on the testing server. Passing `mock=true` should return a mock data response (bypassing the backend).
 
 Implementing this feature early in development ensures that the API will exhibit consistent behavior, supporting a test driven development methodology.
 
 **Note:** If the mock parameter is included in a request to the production environment, an error should be raised.
-```
+
 
 ## JSONP
 
