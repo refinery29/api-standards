@@ -344,11 +344,30 @@ Draft:
 
 ## Embedding Resources
 
-**TODO:** Please submit PR's to improve this section.
+Use an `?include=____` parameter to embed the data for linked resources.
 
+The value is a comma-separated list of fields to expand into full objects, and can use periods to indicated nested objects.
+
+For example, with no includes, an API might return this response for an appointment:
+
+```json
+{
+  "date": "2016-01-20 12:43:54",
+  "customer": "6ed82c31-1b5e-4a11-987b-37c96ccd6e91"
+}
 ```
-Draft:
 
- * **Phil Says** Phil recommends implementing a ?include=____ parameter to embed the data for linked resources.
- * `?include=` for fields to "follow" (include object rather than id)
+Called with `?include=customer.company` the same API would return:
+
+```json
+{
+  "date": "2016-01-20 12:43:54",
+  "customer": {
+    "id": "6ed82c31-1b5e-4a11-987b-37c96ccd6e91",
+    "name": "John Smith",
+    "company": {
+      "name": "SanCorp",
+     }
+   }
+}
 ```
