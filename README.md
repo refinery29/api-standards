@@ -58,8 +58,6 @@ These are *pragmatic* guidelines. We think this is the best way for Refinery29 t
 * URL v. header:
     * If it changes the logic you write to handle the response, put it in the URL.
     * If it doesn’t change the logic for each response, like authorization info, put it in the header.
-* Specify optional fields in a comma separated list.
-    * **TODO:** should we mandate a `?fields=` for this? 
 
 ## Content Type
 
