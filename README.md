@@ -343,13 +343,13 @@ Draft:
 
 ## Limiting Returned Fields
 
-By default, every API request should respond with all the fields on the speciefied resouce. 
+By default, every API request should respond with all the fields on the specified resouce. 
 
 However, sometimes you may want to allow clients to filter the response to only include the fields that they're going to use to reduce payload size. 
 
 To accomplish this, us a `?fields=___` parameter. When the fields parameter is specified as a comma-separated list, your API should **only** return the fields requested by the client.
 
-**Note:** Some APIs use a `exclude` parameter that acts inversely to `fields`. In order to avoid confusion, this standard encourages only implementing the `fields` paramete, allowing clients to specify what information they want to receive instead of what they don't want.
+**Note:** Some APIs use a `exclude` parameter that acts inversely to `fields`. In order to avoid confusion, this standard encourages only implementing the `fields` parameter, allowing clients to specify what information they want to receive instead of what they don't want.
 
 
 ## Embedding Resources
