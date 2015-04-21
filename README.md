@@ -308,18 +308,27 @@ Draft:
 
 ## Automated Testing
 
+It is almost impossible to provide consistent, reliable APIs without testing. We recommend a multi-pronged approach to testing API codebases.
+
+### Unit Tests
+
+Unit tests verify all the building blocks of your API. Implement unit testing using the best practices for your programming language and/or frameworks, and ensure that you're testing all of the software components that you use to build your API.
+
+### Integration / Acceptance Testing
+
+The second layer of testing for a reliable API is Integration or Acceptance testing that excercises each endpoint. These tests should actually make HTTP(S) calls to your API and inspect the response.
+
+### Test your Documentation
+
+Tools like [Dredd](https://philsturgeon.uk/api/2015/01/28/dredd-api-testing-documentation/) should be used to confirm that your API conforms to your [documentation](#documentation) and vice-versa.
+
+### Automate Your Tests
+
  > "If you don't automate your testing, you don't have testing."  
  > -- Phil Sturgeon
 
-**TODO:** Please submit PR's to improve this section.
+Make it easy to run your tests, and configure your CI tools (Travis, Jenkins,...) to run the tests automatically. Put bariers in your way to make sure your team never deploys without running all the tests.
 
-```
-Draft:
-
- * Dredd for testing documentation
- * Integration/Acceptance testing that hits the endpoints
- * Thorough unit testing
-```
 
 ## Documentation
 
