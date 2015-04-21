@@ -27,6 +27,7 @@ If your idea isn't well-formed enough for a PR, feel free to open an Issue on th
 * [Authentication](#authentication)
 * [Documentation](#documentation)
 * [IDs](#ids)
+* [Limiting Returned Fields](#limiting-returned-fields)
 * [Embedding Resources](#embedding-resources)
 
 ## Introduction
@@ -342,9 +343,22 @@ Draft:
 * R29 Takeaway: We agree, sometimes. Monorail already exposes UUIDs for users. We're not sure it has the same advantages for entries, etc. but it's worth talking about.
 ```
 
+## Limiting Returned Fields
+
+By default, every API request should respond with all the fields on the speciefied resouce. 
+
+However, sometimes you may want to allow clients to filter the response to only include the fields that they're going to use to reduce payload size. 
+
+To accomplish this, us a `?fields=___` parameter. When the fields parameter is specified as a comma-separated list, your API should **only** return the fields requested by the client.
+
+**Note:** Some APIs use a `exclude` parameter that acts inversely to `fields`. In order to avoid confusion, this standard encourages only implementing the `fields` paramete, allowing clients to specify what information they want to receive instead of what they don't want.
+
+
 ## Embedding Resources
 
-Use an `?include=____` parameter to embed the data for linked resources.
+Every API response is a complete RESTful resource by default. Sometimes, you may want to provide clients with additionaly linked resources without making extra API calls.
+
+To accomplish this, use an `?include=____` parameter to embed additional data for linked resources.
 
 The value is a comma-separated list of fields to expand into full objects, and can use periods to indicated nested objects.
 
