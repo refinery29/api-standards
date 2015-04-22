@@ -314,9 +314,11 @@ It is almost impossible to provide consistent, reliable APIs without testing. We
 
 Unit tests verify all the building blocks of your API. Implement unit testing using the best practices for your programming language and/or frameworks, and ensure that you're testing all of the software components that you use to build your API.
 
+Unit tests should NOT access the data store or integrate with other components. Use mocks to isolate the component you are testing.
+
 ### Integration / Acceptance Testing
 
-The second layer of testing for a reliable API is Integration or Acceptance testing that excercises each endpoint. These tests should actually make HTTP(S) calls to your API and inspect the response.
+The second layer of testing for a reliable API is Integration or Acceptance testing that excercises each endpoint. These tests should actually make HTTP(S) calls to your API and inspect the response. Integration tests should access a data store with test data or fixtures.
 
 ### Test your Documentation
 
