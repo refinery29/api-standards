@@ -270,7 +270,7 @@ R29 Takeaways: We think this is brilliant too. Cursors could be stored in redis 
 
 ## Mock Responses
 
-It is suggested that each resource accept a 'mock' parameter on the testing server. Passing `mock=true` should return a mock data response (bypassing the backend).
+It is suggested that each resource accept a 'mock' parameter on the testing server. Passing `?mock=true` should return a mock data response (bypassing the data store and business logic).
 
 Implementing this feature early in development ensures that the API will exhibit consistent behavior, supporting a test driven development methodology.
 
