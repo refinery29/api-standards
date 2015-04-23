@@ -382,7 +382,7 @@ Called with `?include=customer` the same API would return:
 }
 ```
 
-Called with `?include=customer.company` the same API would return:
+And called with `?include=customer.company`:
 
 
 ```json
@@ -397,3 +397,5 @@ Called with `?include=customer.company` the same API would return:
    }
 }
 ```
+
+Whether `include` is supported, which fields it supports it for, and how deep queries are allowed should be decided for each endpoint and documented clearly.
