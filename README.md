@@ -323,14 +323,7 @@ There's nothing here.
 
 ## IDs
 
-**TODO:** Please submit PR's to improve this section.
-
-```
-Draft:
-
-* **Phil Says:** UUID/GUIDs are better than auto-incrementing values
-* R29 Takeaway: We agree, sometimes. Monorail already exposes UUIDs for users. We're not sure it has the same advantages for entries, etc. but it's worth talking about.
-```
+Prefer exposing  UUID/GUIDs over auto-incrementing values.
 
 ## Limiting Returned Fields
 
