@@ -313,13 +313,16 @@ Draft:
 
 ## Documentation
 
-**TODO:** Please submit PR's to improve this section.
+Document your APIs thoroughly. Assume the client will **not** have source code access. 
 
-```
-Draft:
+The prefered method is to put all API documentation in a single apiary.apib file at the root of the repository. *Refinery29 has tooling for formatting and publishing these files, and some repos provide tooling to generate them automatically from documentation metadata in the source code itself.*
 
-There's nothing here.
-```
+Regardless of the method you use to write and publish your documentation, it should cover:
+
+ * List all endpoints and resources
+ * Define and explain all parameters each endpoint expects and allows
+ * Provide sample responses for each endpoint
+ * Describe which error codes are returned and how the error response is formatted
 
 ## IDs
 
