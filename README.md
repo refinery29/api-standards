@@ -53,7 +53,9 @@ These are *pragmatic* guidelines. We think this is the best way for Refinery29 t
 	* Plural-only makes URLs consistent.
 	* Plural english nouns can be hurdle for developers who's first language isn't english. `/people` vs `/person/1234`
 * Use HTTP verbs (GET, POST, PUT, DELETE, PATCH) to operate on the collections and elements.
-   * Yes, you should support PATCH. More on that below. 
+   * Yes, you should support PATCH. More on that below.
+* Use a verb for any application-specific action that doesn't naturally map to one of the HTTP verbs, for example 
+  `POST /entries/1aae9591-8337-4068-8f01-a3920b1e798f/compile`. It will be the last segment of the route.
 * URL v. header:
     * If it changes the logic you write to handle the response, put it in the URL.
     * If it doesn’t change the logic for each response, like authorization info, put it in the header.
