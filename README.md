@@ -365,11 +365,25 @@ For example, with no includes, an API might return this response for an appointm
 ```json
 {
   "date": "2016-01-20 12:43:54",
-  "customer": "6ed82c31-1b5e-4a11-987b-37c96ccd6e91"
+  "customer_id": "6ed82c31-1b5e-4a11-987b-37c96ccd6e91"
+}
+```
+
+Called with `?include=customer` the same API would return:
+
+```json
+{
+  "date": "2016-01-20 12:43:54",
+  "customer": {
+    "id": "6ed82c31-1b5e-4a11-987b-37c96ccd6e91",
+    "name": "John Smith",
+    "company_id": "37c96ccd-2c31-1b5e-4a11-6e91987b6ed8"
+   }
 }
 ```
 
 Called with `?include=customer.company` the same API would return:
+
 
 ```json
 {
