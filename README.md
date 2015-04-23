@@ -316,9 +316,9 @@ Unit tests verify all the building blocks of your API. Implement unit testing us
 
 Unit tests should NOT access the data store or integrate with other components. Use mocks to isolate the component you are testing.
 
-### Integration / Acceptance Testing
+### Acceptance Testing
 
-The second layer of testing for a reliable API is Integration or Acceptance testing that excercises each endpoint. These tests should actually make HTTP(S) calls to your API and inspect the response. Integration tests should access a data store with test data or fixtures.
+The second layer of testing for a reliable API is Acceptance testing that excercises each endpoint. These tests should actually make HTTP(S) calls to your API and inspect the response. Acceptance tests should access a data store with test data or fixtures.
 
 ### Test your Documentation
 
