@@ -27,6 +27,7 @@ If your idea isn't well-formed enough for a PR, feel free to open an Issue on th
 * [Authentication](#authentication)
 * [Documentation](#documentation)
 * [IDs](#ids)
+* [Limiting Returned Fields](#limiting-returned-fields)
 * [Embedding Resources](#embedding-resources)
 
 ## Introduction
@@ -57,8 +58,6 @@ These are *pragmatic* guidelines. We think this is the best way for Refinery29 t
 * URL v. header:
     * If it changes the logic you write to handle the response, put it in the URL.
     * If it doesn’t change the logic for each response, like authorization info, put it in the header.
-* Specify optional fields in a comma separated list.
-    * **TODO:** should we mandate a `?fields=` for this? 
 
 ## Content Type
 
@@ -333,13 +332,61 @@ Draft:
 * R29 Takeaway: We agree, sometimes. Monorail already exposes UUIDs for users. We're not sure it has the same advantages for entries, etc. but it's worth talking about.
 ```
 
+## Limiting Returned Fields
+
+By default, every API request should respond with all the fields on the specified resouce. 
+
+However, sometimes you may want to allow clients to filter the response to only include the fields that they're going to use to reduce payload size. 
+
+To accomplish this, us a `?fields=___` parameter. When the fields parameter is specified as a comma-separated list, your API should **only** return the fields requested by the client.
+
+**Note:** Some APIs use a `exclude` parameter that acts inversely to `fields`. In order to avoid confusion, this standard encourages only implementing the `fields` parameter, allowing clients to specify what information they want to receive instead of what they don't want.
+
+
 ## Embedding Resources
 
-**TODO:** Please submit PR's to improve this section.
+Every API response is a complete RESTful resource by default. Sometimes, you may want to provide clients with additionaly linked resources without making extra API calls.
 
-```
-Draft:
+To accomplish this, use an `?include=____` parameter to embed additional data for linked resources.
 
- * **Phil Says** Phil recommends implementing a ?include=____ parameter to embed the data for linked resources.
- * `?include=` for fields to "follow" (include object rather than id)
+The value is a comma-separated list of fields to expand into full objects, and can use periods to indicated nested objects.
+
+For example, with no includes, an API might return this response for an appointment:
+
+```json
+{
+  "date": "2016-01-20 12:43:54",
+  "customer_id": "6ed82c31-1b5e-4a11-987b-37c96ccd6e91"
+}
 ```
+
+Called with `?include=customer` the same API would return:
+
+```json
+{
+  "date": "2016-01-20 12:43:54",
+  "customer": {
+    "id": "6ed82c31-1b5e-4a11-987b-37c96ccd6e91",
+    "name": "John Smith",
+    "company_id": "37c96ccd-2c31-1b5e-4a11-6e91987b6ed8"
+   }
+}
+```
+
+And called with `?include=customer.company`:
+
+
+```json
+{
+  "date": "2016-01-20 12:43:54",
+  "customer": {
+    "id": "6ed82c31-1b5e-4a11-987b-37c96ccd6e91",
+    "name": "John Smith",
+    "company": {
+      "name": "SanCorp",
+     }
+   }
+}
+```
+
+Whether `include` is supported, which fields it supports it for, and how deep queries are allowed should be decided for each endpoint and documented clearly.
