@@ -24,7 +24,6 @@ If your idea isn't well-formed enough for a PR, feel free to open an Issue on th
 * [Mock Responses](#mock-responses)
 * [JSONP](#jsonp)
 * [Automated Testing](#automated-testing)
-* [Authentication](#authentication)
 * [Documentation](#documentation)
 * [IDs](#ids)
 * [Limiting Returned Fields](#limiting-returned-fields)
@@ -281,20 +280,6 @@ Implementing this feature early in development ensures that the API will exhibit
 Consider carefully whether your endpoint should support JSONP, there are security implications.) 
 
 If you do, support both `?callback=` and `?jsonp=` to enable JSONP wrappers in the response. 
-
-## Authentication
-
-**TODO:** Please submit PR's to improve this section.
-
-```
-Draft:
-
-* Anything public-facing should be OAuth2 for sure.
-* Monorail could become an OAuth2 provider pretty easily.
-* Dash could use OAuth2, against either monorail or Google accounts. (Matt M: talk with IT about SSO)
-* We're not sure about internal service<->service API calls where we're currently using API Keys.
-
-```
 
 ## Automated Testing
 
