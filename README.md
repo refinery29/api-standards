@@ -191,38 +191,41 @@ This section borrows heavily from (jsonapi.org)[http://jsonapi.org/format/#error
 
 ## Pagination
 
-**TODO:** Please submit PR's to improve this section.
+This section is heavily influenced by (jsonapi.org)[http://jsonapi.org/format/#fetching-pagination]
+
+ * Use pagination links in a `pagination` object at the top level of the response.
+   * `first` - the first page of data
+   * `last` - the last page of data
+   * `prev` - the previous page of data (when applicable)
+   * `next` - the next page of data (when applicable)
 
 ```
-Draft:
-
-#### Obama Says
-
-* If no limit is specified, return results with a default limit.
-* To get records 51 through 75 do this:
-    * http://example.gov/magazines?limit=25&offset=50
-    * offset=50 means, ‘skip the first 50 records’
-    * limit=25 means, ‘return a maximum of 25 records’
-
-Information about record limits and total available count should also be included in the response. Example:
-
-    {
-        "metadata": {
-            "resultset": {
-                "count": 227,
-                "offset": 25,
-                "limit": 25
-            }
-        },
-        "results": []
-    }
-
-#### Phil Says
-
-Phil recommends cursors over pages, limits, offsets, etc.
-
-R29 Takeaways: We think this is brilliant too. Cursors could be stored in redis or Aerospike depending on the platform.
+{
+   "result": [...],
+   "pagination": {
+       "first": "http://www.refinery29.com/api/3/content/entries",
+       "last": "http://www.refinery29.com/api/3/content/entries?before=cUQmjVHlKfNf2Kwa",
+       "prev": "http://www.refinery29.com/api/3/content/entries?before=mRo9YXb3bhlEG52g",
+       "next": "http://www.refinery29.com/api/3/content/entries?after=cEEHJc5Smh7NCg9m"
+   }
+}
 ```
+
+These standards are agnostic about the pagination strategy used by a server. Effective pagination strategies include (but are not limited to): page-based, offset-based, and cursor-based. However, the following query parameters are reserved and should only be used for pagination:
+
+ * Page-based:
+   * `page`
+ * Offset-based:
+   * `offset`
+ * Cursor-based:
+   * `before`
+   * `after`
+ * Any scheme:
+   * `limit`
+  
+When possible, we recommend cursor-based pagination strategies due to the benefits in large data sets and data sets that change frequently.
+
+*TODO:* Work out cursor-based strategy. Esp whether before and after are exclusive or inclusive. Write examples. (@Cara)
 
 ## Request & Response Examples
 
