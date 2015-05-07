@@ -203,10 +203,10 @@ This section is heavily influenced by (jsonapi.org)[http://jsonapi.org/format/#f
 {
    "result": [...],
    "pagination": {
-       "first": "http://www.refinery29.com/api/3/content/entries",
-       "last": "http://www.refinery29.com/api/3/content/entries?before=cUQmjVHlKfNf2Kwa",
-       "prev": "http://www.refinery29.com/api/3/content/entries?before=mRo9YXb3bhlEG52g",
-       "next": "http://www.refinery29.com/api/3/content/entries?after=cEEHJc5Smh7NCg9m"
+       "first": "/api/3/content/entries",
+       "last": "/api/3/content/entries?before=cUQmjVHlKfNf2Kwa",
+       "prev": "/api/3/content/entries?before=mRo9YXb3bhlEG52g",
+       "next": "/api/3/content/entries?after=cEEHJc5Smh7NCg9m"
    }
 }
 ```
