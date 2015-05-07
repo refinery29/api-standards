@@ -229,6 +229,7 @@ This section is heavily influenced by (jsonapi.org)[http://jsonapi.org/format/#f
        "last": "http://www.refinery29.com/api/3/content/entries?cursor=cEEHJc5Smh7NCg9m"
    }
 }
+```
 
 These standards are agnostic about the pagination strategy used by a server. Effective pagination strategies include (but are not limited to): page-based, offset-based, and cursor-based. The page query parameter can be used as a basis for any of these strategies. However, the following query parameters are reserved and should only be used for pagination:
 
