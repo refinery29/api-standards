@@ -224,24 +224,28 @@ This section is heavily influenced by (jsonapi.org)[http://jsonapi.org/format/#f
    "result": [...],
    "pagination": {
        "first": "http://www.refinery29.com/api/3/content/entries",
-       "last": "http://www.refinery29.com/api/3/content/entries?cursor=cUQmjVHlKfNf2Kwa",
-       "prev": "http://www.refinery29.com/api/3/content/entries?cursor=mRo9YXb3bhlEG52g",
-       "last": "http://www.refinery29.com/api/3/content/entries?cursor=cEEHJc5Smh7NCg9m"
+       "last": "http://www.refinery29.com/api/3/content/entries?before=cUQmjVHlKfNf2Kwa",
+       "prev": "http://www.refinery29.com/api/3/content/entries?before=mRo9YXb3bhlEG52g",
+       "next": "http://www.refinery29.com/api/3/content/entries?after=cEEHJc5Smh7NCg9m"
    }
 }
 ```
 
-These standards are agnostic about the pagination strategy used by a server. Effective pagination strategies include (but are not limited to): page-based, offset-based, and cursor-based. The page query parameter can be used as a basis for any of these strategies. However, the following query parameters are reserved and should only be used for pagination:
+These standards are agnostic about the pagination strategy used by a server. Effective pagination strategies include (but are not limited to): page-based, offset-based, and cursor-based. However, the following query parameters are reserved and should only be used for pagination:
 
  * Page-based:
    * `page`
  * Offset-based:
-   * `limit`
    * `offset`
  * Cursor-based:
-   * `cursor`
-
+   * `before`
+   * `after`
+ * Any scheme:
+   * `limit`
+  
 When possible, we recommend cursor-based pagination strategies due to the benefits in large data sets and data sets that change frequently.
+
+*TODO:* Work out cursor-based strategy. Esp whether before and after are exclusive or inclusive. Write examples. (@Cara)
 
 ## Request & Response Examples
 
