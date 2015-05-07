@@ -211,38 +211,36 @@ Including a very specific code and a URL to your docs for that error is very hel
 
 ## Pagination
 
-**TODO:** Please submit PR's to improve this section.
+This section is heavily influenced by (jsonapi.org)[http://jsonapi.org/format/#fetching-pagination]
+
+ * Use pagination links in a `pagination` object at the top level of the response.
+   * `first` - the first page of data
+   * `last` - the last page of data
+   * `prev` - the previous page of data (when applicable)
+   * `next` - the next page of data (when applicable)
 
 ```
-Draft:
+{
+   "result": [...],
+   "pagination": {
+       "first": "http://www.refinery29.com/api/3/content/entries",
+       "last": "http://www.refinery29.com/api/3/content/entries?cursor=cUQmjVHlKfNf2Kwa",
+       "prev": "http://www.refinery29.com/api/3/content/entries?cursor=mRo9YXb3bhlEG52g",
+       "last": "http://www.refinery29.com/api/3/content/entries?cursor=cEEHJc5Smh7NCg9m"
+   }
+}
 
-#### Obama Says
+These standards are agnostic about the pagination strategy used by a server. Effective pagination strategies include (but are not limited to): page-based, offset-based, and cursor-based. The page query parameter can be used as a basis for any of these strategies. However, the following query parameters are reserved and should only be used for pagination:
 
-* If no limit is specified, return results with a default limit.
-* To get records 51 through 75 do this:
-    * http://example.gov/magazines?limit=25&offset=50
-    * offset=50 means, ‘skip the first 50 records’
-    * limit=25 means, ‘return a maximum of 25 records’
+ * Page-based:
+   * `page`
+ * Offset-based:
+   * `limit`
+   * `offset`
+ * Cursor-based:
+   * `cursor`
 
-Information about record limits and total available count should also be included in the response. Example:
-
-    {
-        "metadata": {
-            "resultset": {
-                "count": 227,
-                "offset": 25,
-                "limit": 25
-            }
-        },
-        "results": []
-    }
-
-#### Phil Says
-
-Phil recommends cursors over pages, limits, offsets, etc.
-
-R29 Takeaways: We think this is brilliant too. Cursors could be stored in redis or Aerospike depending on the platform.
-```
+When possible, we recommend cursor-based pagination strategies due to the benefits in large data sets and data sets that change frequently.
 
 ## Request & Response Examples
 
