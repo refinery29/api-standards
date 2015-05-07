@@ -185,7 +185,7 @@ This section borrows heavily from (jsonapi.org)[http://jsonapi.org/format/#error
    * `title` A short description of the error. It SHOULD NOT change from occurrence to occurrence of the problem.
    * `code` A unique identifer for this class of error (More specific than an HTTP Response Code)
  * The following keys are Optional for each error:
-   * `id` A unique identifier for this instance of the error, which can also be written to log files or other sources to aid the API developer in troubleshooting.
+   * `id` A unique identifier (preferably a uuid or guid) for this instance of the error, which can also be written to log files or other sources to aid the API developer in troubleshooting.
    * `links` An array of URLs to documentation or resources that may help the client developer in troubleshooting.
    * `detail` A human-readable explanation specific to this occurrence of the problem.
 
