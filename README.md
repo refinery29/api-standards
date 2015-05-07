@@ -174,40 +174,20 @@ For images, pay attention to the content type on the request. Allow both:
 
 ## Error handling
 
-**TODO:** Please submit PR's to improve this section.
+This section borrows heavily from (jsonapi.org)[http://jsonapi.org/format/#errors]
 
-```
-Draft:
-#### Obama Says
-
-Error responses should include a common HTTP status code, message for the developer, message for the end-user (when appropriate), internal error code (corresponding to some specific internally determined ID), links where developers can find more info. For example:
-
-    {
-      "status" : 400,
-      "developerMessage" : "Verbose, plain language description of the problem. Provide developers
-       suggestions about how to solve their problems here",
-      "userMessage" : "This is a message that can be passed along to end-users, if needed.",
-      "errorCode" : "444444",
-      "moreInfo" : "http://www.example.gov/developer/path/to/help/for/444444,
-       http://drupal.org/node/444444",
-    }
-
-Use three simple, common response codes indicating (1) success, (2) failure due to client-side problem, (3) failure due to server-side problem:
-
-* 200 - OK
-* 400 - Bad Request
-* 500 - Internal Server Error
-
-#### Phil Says
-
-* Use HTTP Error Codes
-* Return multiple errors when things go wrong.
-* Phil recommends following http://jsonapi.org/format/#errors
-Including a very specific code and a URL to your docs for that error is very helpful
-* R29 Takeaways: We have a lot to learn here, there's not much consistency in error messages across our APIs. These are good tips.
-
-**TODO:** Work on this!
-```
+ * Don't repeat HTTP response codes (normal or error cases!) in the body.
+ * Don't include a 'status', 'message', etc. at the top level.
+ * DO use a top-level key "errors", that contains an array of all errors that were detected.
+ * DO use an appropriate HTTP Response Code in the 400 range (for client errors) or the 500 range (for server errors)
+ * Don't include any messages intended for the end-user. The client should be responsibe for displaying a user-friendly, localized error message to the user.
+ * DO include the following keys for each error:
+   * `title` A short description of the error. It SHOULD NOT change from occurrence to occurrence of the problem.
+   * `code` A unique identifer for this class of error (More specific than an HTTP Response Code)
+ * The following keys are Optional for each error:
+   * `id` A unique identifier for this instance of the error, which can also be written to log files or other sources to aid the API developer in troubleshooting.
+   * `links` An array of URLs to documentation or resources that may help the client developer in troubleshooting.
+   * `detail` A human-readable explanation specific to this occurrence of the problem.
 
 ## Pagination
 
