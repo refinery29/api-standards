@@ -189,14 +189,12 @@ This section borrows heavily from (jsonapi.org)[http://jsonapi.org/format/#error
    * `links` An array of URLs to documentation or resources that may help the client developer in troubleshooting.
    * `detail` A human-readable explanation specific to this occurrence of the problem.
 
-##Pagination
 
+## Pagination
 
-###Overview
+These standards are strategy-agnostic and apply whether the server implements page-based, offset-based, or cursor-based pagination.
 
-These standards are strategy-agnostic and apply whether the server implements page-based, offset-based, or cursor-based pagination. 
-
-**DON'T** use the following query params for anything other than pagination: `page`, `offset`, `before`, `after`, `next`, `previous`, or `limit`.
+**DON'T** use the following query params for anything other than pagination: `page`, `offset`, `before`, `after`, `next`, `prev`/`previous`, or `limit`.
 
 **DO** include a top-level object named “pagination” and define the following within it:
   * `prev` - a link to the previous page of data.
@@ -212,46 +210,55 @@ These standards are strategy-agnostic and apply whether the server implements pa
 }
 ```
 
+### Strategies
+
 If possible, use **cursor-based** pagination when…
 
 * You are dealing with very large (> 10k rows) data sets.
-* You are dealing with real time data. 
-* You have the requisite column of sequentially-ordered, unique values to sort on. 
+* You are dealing with real time data.
 
 If possible, use **offset-based** or **page-based** pagination when…
 
-* You need more flexibility in sorting results. 
-* You need more flexibility in traversing results.
-* You do not have a column of sequentially-ordered, unique values to sort on.
+* The UI allows sorting by a column of non-unique values.
+* The UI allows jumping to a specific page of results.
 
+### Implementation
 
+**Offset-based**
 
-####Implementation
-
-**Offset-based** 
-
-* The API checks for integer parameters `offset` and `limit`. 
-* The db query skips `offset` number of results and returns only `limit` number of results. 
-* Before the request the client adds `limit` to `offset` to determine the new `offset`. 
+* The API should check for integer parameters `offset` and `limit`.
+* The db query should skip `offset` number of results and return only `limit` results.
+* Its response should include `prev`, a link where `offset` = current `offset - limit`.
+* Its response should include `next`, a link where `offset` = current `offset + limit`.
 
 **Page-based** 
 
-* The API checks for integer parameters `page` and `limit`. 
-* The db query skips `page * limit` number of results and returns only `limit` number of results. 
-* Before the next request the client increments `page` by one.
+* The API should check for integer parameters `page` and `limit`.
+* The db query should skip `page * limit` results and return only `limit` results.
+* Its response should include `prev`, a link where `page` = current `page - 1`.
+* Its response should include `next`, a link where `page` = current `page +1`.
 
-**Cursor-based** 
+**Cursor-based**
 
-Before you implement cursor-based pagination, make sure you have a column of sequentially-ordered, unique values to sort on. Without that you cannot use cursor-based pagination. 
+Before you implement cursor-based pagination, make sure you have a column of sequentially-ordered, unique values to sort on. Without that [you cannot](http://www.sitepoint.com/paginating-real-time-data-cursor-based-pagination/) use cursor-based pagination.
 
-//TODO: finish writing up cursor-based pagination strategy. Describe use of min_id and max_id, or before and after, or later_than, etc. Link to really helpful example from Twitter: https://dev.twitter.com/rest/public/timelines
+* The API should check for parameters `before` or `after`, `limit`, and `order`.
+* The API should treat `before` and `after` as *exclusive*.
+* If `after` is present, the db query should return `limit` results where `field > after`.
+* If `before` is present, the db query should return `limit` results where `field < before` and order is reversed. Results should be flipped before they are returned.
+* Its response should include `prev`, a link where `before` is pulled from the first result.
+* Its response should include `next`, a link where `after` is pulled from the last result.
 
-####A note on SEO
+Cursor-based pagination is often used with timestamps. Twitter [explains this use case](https://dev.twitter.com/rest/public/timelines
+) well.
+
+### A note on SEO
 
 The consumer of paginated results must take special care to ensure every result (not just the first page) is indexed by Google. Here are two [strategies](http://www.sitepoint.com/pagination-seo-red-flags-best-practices/):
 
-1. Put a `rel=“nofollow”` element on each page of results. Create another page that displays ALL results. Allow Google to index that page. Advantage: every result will be indexed. Disadvantage: links will point to the View All page, which will load slowly and require a lot of scrolling. 
-2. Include`rel=“prev”` and `rel=“next”` on each page of results. Google’s bot will follow the links to index each page separately. Advantage: links will point to specific pages, and you won’t have to deal with a monster View All page. Disadvantage: Google’s bot might quit before it gets to the last page of results, so you can’t assume they’ll all be indexed. 
+**Put a `rel=“nofollow”` element on each page of results.** Create another page that displays ALL results. Allow Google to index that page. Advantage: every result will be indexed. Disadvantage: links will point to the View All page, which will load slowly and require a lot of scrolling.
+
+**Or include`rel=“prev”` and `rel=“next”` on each page of results.** Google’s bot will follow the links to index each page separately. Advantage: links will point to specific pages, and you won’t have to deal with a monster View All page. Disadvantage: Google’s bot might quit before it gets to the last page of results, so you can’t assume they’ll all be indexed.
 
 ## Request & Response Examples
 
