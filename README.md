@@ -204,8 +204,8 @@ These standards are strategy-agnostic and apply whether the server implements pa
 {
     "result": [...],
     "pagination": {
-        "prev": "http://www.refinery29.com/api/3/content/entries?before=mRo9YXb3bhlEG52g",
-        "next": "http://www.refinery29.com/api/3/content/entries?after=cEEHJc5Smh7NCg9m"
+        "prev": "/api/3/content/entries?before=mRo9YXb3bhlEG52g",
+        "next": "/api/3/content/entries?after=cEEHJc5Smh7NCg9m"
     }
 }
 ```
