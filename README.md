@@ -51,7 +51,7 @@ These are *pragmatic* guidelines. We think this is the best way for Refinery29 t
 * URLs should include nouns, not verbs.
 * Use **plural nouns** only (no singular nouns).
 	* Plural-only makes URLs consistent.
-	* Plural english nouns can be hurdle for developers who's first language isn't english. `/people` vs `/person/1234`
+	* Irregular plurals can trip up developers whose first language isn't English. For example: the plural of 'entry' is 'entries' not 'entrys'. When naming endpoints try to use nouns with regular plurals. For example: prefer 'article' over 'story', and 'set' or 'group' over 'category'.
 * Use HTTP verbs (GET, POST, PUT, DELETE, PATCH) to operate on the collections and elements.
    * Yes, you should support PATCH. More on that below. 
 * URL v. header:
