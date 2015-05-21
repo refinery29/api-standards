@@ -240,12 +240,13 @@ If possible, use **offset-based** or **page-based** pagination when…
 
 **Cursor-based**
 
-Before you implement cursor-based pagination, make sure you have a column of sequentially-ordered, unique values to sort on. Without that [you cannot](http://www.sitepoint.com/paginating-real-time-data-cursor-based-pagination/) use cursor-based pagination.
+Before you implement cursor-based pagination, make sure you have a column of monotonically increasing, unique values to sort on. Without that [you cannot](http://www.sitepoint.com/paginating-real-time-data-cursor-based-pagination/) use cursor-based pagination.
 
 * The API should check for parameters `before` or `after`, `limit`, and `order`.
 * The API should treat `before` and `after` as *exclusive*.
 * If `after` is present, the db query should return `limit` results where `field > after`.
 * If `before` is present, the db query should return `limit` results where `field < before` and order is reversed. Results should be flipped before they are returned.
+* If `before` and `after` are present, API should return a 400 error.
 * Its response should include `prev`, a link where `before` is pulled from the first result.
 * Its response should include `next`, a link where `after` is pulled from the last result.
 
