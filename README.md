@@ -316,7 +316,7 @@ GET http://www.refinery29.com/api/content/3/entries/mRo9YXb3bhlEG52g
 ```
  
  
-### Attempt to retrieve a resource that doesn't exist?
+### Attempt to retrieve a resource that doesn't exist
 
 #### Request
 
@@ -338,6 +338,33 @@ GET http://www.refinery29.com/api/content/3/entries/notAValidID
    	    "links": ["http://docs.myapi.com/entries/errors#1234"],
    	    "detail": "The ID \"notAValidID\" does not represent a valid entry."
    ]
+}
+```
+
+### Create a a new resource
+
+#### Request
+
+```
+POST http://www.refinery29.com/api/content/3/entries
+Content-type: application/json; charset=utf-8 
+
+{
+    "title": "Breaking News...",
+    "text": "Cupcake ipsum dolor sit. Amet donut apple pie. Croissant bear claw toffee halvah sugar plum cake."
+}
+```
+
+#### Response
+
+```
+201 Created
+Location: http://www.refinery29.com/api/content/3/entries/fcp2520f052e6
+
+{
+    "id": "fcp2520f052e6",
+    "title": "Breaking News...",
+    "text": "Cupcake ipsum dolor sit. Amet donut apple pie. Croissant bear claw toffee halvah sugar plum cake."
 }
 ```
 
