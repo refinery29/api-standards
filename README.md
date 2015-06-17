@@ -8,8 +8,6 @@ Please limit PRs to one "idea." For example, if you want to update the "Error Ha
 
 If your idea isn't well-formed enough for a PR, feel free to open an Issue on this Github repo. We'll discuss it and figure out what changes to make.
 
-**NOTE:** There's a good chance we'll make this repo public. Please don't discuss any proproietary info in Pull Requests or Issues!
-
 ----
 
 * [Introduction](#introduction)
