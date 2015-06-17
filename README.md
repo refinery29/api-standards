@@ -52,7 +52,7 @@ These are *pragmatic* guidelines. We think this is the best way for Refinery29 t
 * Use **plural nouns** only (no singular nouns).
 	* Plural-only makes URLs consistent.
 	* Plural english nouns can be hurdle for developers who's first language isn't english. `/people` vs `/person/1234`
-* Use HTTP verbs (GET, POST, PUT, DELETE, PATCH) to operate on the collections and elements.
+* Use HTTP verbs (GET, HEAD, POST, PUT, DELETE, PATCH) to operate on the collections and elements.
    * Yes, you should support PATCH. More on that below. 
 * URL v. header:
     * If it changes the logic you write to handle the response, put it in the URL.
@@ -120,6 +120,7 @@ Remember: REST isn't the same model as CRUD. We've included some equivalents bel
 
 | METHOD | ENDPOINT | CRUD Equivalent | Notes | 
 | ------ | -------- | --------------- | ----- |
+| HEAD | /users/1234 | --- | Determine if user record exists without generating response body. |
 | GET | /users | -- | List Users. |
 | GET | /users/1234 | READ | Retrieve one user record. |
 | PUT | /users/1234 | UPDATE | Update one user record. Use this when your payload includes all the fields. |
@@ -257,9 +258,9 @@ Cursor-based pagination is often used with timestamps. Twitter [explains this us
 
 The consumer of paginated results must take special care to ensure every result (not just the first page) is indexed by Google. Here are two [strategies](http://www.sitepoint.com/pagination-seo-red-flags-best-practices/):
 
-**Put a `rel=“nofollow”` element on each page of results.** Create another page that displays ALL results. Allow Google to index that page. Advantage: every result will be indexed. Disadvantage: links will point to the View All page, which will load slowly and require a lot of scrolling.
+**Put a `rel="nofollow"` element on each page of results.** Create another page that displays ALL results. Allow Google to index that page. Advantage: every result will be indexed. Disadvantage: links will point to the View All page, which will load slowly and require a lot of scrolling.
 
-**Or include`rel=“prev”` and `rel=“next”` on each page of results.** Google’s bot will follow the links to index each page separately. Advantage: links will point to specific pages, and you won’t have to deal with a monster View All page. Disadvantage: Google’s bot might quit before it gets to the last page of results, so you can’t assume they’ll all be indexed.
+**Or include`rel="prev"` and `rel="next"` on each page of results.** Google’s bot will follow the links to index each page separately. Advantage: links will point to specific pages, and you won’t have to deal with a monster View All page. Disadvantage: Google’s bot might quit before it gets to the last page of results, so you can’t assume they’ll all be indexed.
 
 ## Request & Response Examples
 
