@@ -192,7 +192,9 @@ This section borrows heavily from (jsonapi.org)[http://jsonapi.org/format/#error
 
 ## Pagination
 
-These standards are strategy-agnostic and apply whether the server implements page-based, offset-based, or cursor-based pagination.
+We strongly encourage or cursor-based pagination, but understand that your API may need to implement page-based or offset-based pagination, "because reasons".
+
+### Guidelines For All Pagination Types
 
 **DON'T** use the following query params for anything other than pagination: `page`, `offset`, `before`, `after`, `next`, `prev`/`previous`, or `limit`.
 
@@ -210,35 +212,12 @@ These standards are strategy-agnostic and apply whether the server implements pa
 }
 ```
 
-### Strategies
+### Implementing Cursor-based Pagination 
 
-If possible, use **cursor-based** pagination when…
+Use **cursor-based** pagination when…
 
 * You are dealing with very large (> 10k rows) data sets.
 * You are dealing with real time data.
-
-If possible, use **offset-based** or **page-based** pagination when…
-
-* The UI allows sorting by a column of non-unique values.
-* The UI allows jumping to a specific page of results.
-
-### Implementation
-
-**Offset-based**
-
-* The API should check for integer parameters `offset` and `limit`.
-* The db query should skip `offset` number of results and return only `limit` results.
-* Its response should include `prev`, a link where `offset` = current `offset - limit`.
-* Its response should include `next`, a link where `offset` = current `offset + limit`.
-
-**Page-based** 
-
-* The API should check for integer parameters `page` and `limit`.
-* The db query should skip `page * limit` results and return only `limit` results.
-* Its response should include `prev`, a link where `page` = current `page - 1`.
-* Its response should include `next`, a link where `page` = current `page +1`.
-
-**Cursor-based**
 
 Before you implement cursor-based pagination, make sure you have a column of monotonically increasing, unique values to sort on. Without that [you cannot](http://www.sitepoint.com/paginating-real-time-data-cursor-based-pagination/) use cursor-based pagination.
 
@@ -252,6 +231,28 @@ Before you implement cursor-based pagination, make sure you have a column of mon
 
 Cursor-based pagination is often used with timestamps. Twitter [explains this use case](https://dev.twitter.com/rest/public/timelines
 ) well.
+
+
+### Other Pagination Strategies
+
+Use **offset-based** or **page-based** pagination when the following requirements are present:
+
+* The UI allows sorting by a column of non-unique values.
+* The UI allows jumping to a specific page of results.
+
+#### Implementing Offset-based Pagination
+
+* The API should check for integer parameters `offset` and `limit`.
+* The db query should skip `offset` number of results and return only `limit` results.
+* Its response should include `prev`, a link where `offset` = current `offset - limit`.
+* Its response should include `next`, a link where `offset` = current `offset + limit`.
+
+#### Implementing Page-based Pagination
+
+* The API should check for integer parameters `page` and `limit`.
+* The db query should skip `page * limit` results and return only `limit` results.
+* Its response should include `prev`, a link where `page` = current `page - 1`.
+* Its response should include `next`, a link where `page` = current `page +1`.
 
 ### A note on SEO
 
