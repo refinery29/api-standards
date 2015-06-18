@@ -8,8 +8,6 @@ Please limit PRs to one "idea." For example, if you want to update the "Error Ha
 
 If your idea isn't well-formed enough for a PR, feel free to open an Issue on this Github repo. We'll discuss it and figure out what changes to make.
 
-**NOTE:** There's a good chance we'll make this repo public. Please don't discuss any proproietary info in Pull Requests or Issues!
-
 ----
 
 * [Introduction](#introduction)
@@ -39,7 +37,7 @@ This document borrows heavily from:
 
 These are *pragmatic* guidelines. We think this is the best way for Refinery29 to build quality, consistent APIs. However:
 
- * We don't think all of these guidelines should be applied retroactively to existing APIs and endpoints. Please apply the guidelines as you can as you're writing new code. If you starting a new API version, you should follow the guidelines strictly. But we're not advocating a bunch of breaking changes to content API v1 at the expense of business objectives!
+ * We don't think all of these guidelines should be applied retroactively to existing APIs and endpoints. Please apply the guidelines as you can as you're writing new code. If you starting a new API version, you should follow the guidelines strictly. But we're not advocating a bunch of breaking changes to existing APIs at the expense of business objectives!
  * You may need to deviate from these guidelines, even in a pristine, new codebase. That's OK, provided that 
    1. You have very good reasons for doing so. You should understand why the guideline you're breaking was put in place, and be able to articulate why that scenario doesn't apply to your situation. If your "break" is an improvement that could apply to all APIs, consider proposing a change to the standards.
    2. Your team has reached a consensus regarding the "break". Deviating from the guidelines isn't something a one or two engineers (even leads or architects!) should do alone.
@@ -102,13 +100,13 @@ In the future, we may pursue putting APIs on a subdomain.
 
 ### Bad URL examples
 * Non-plural noun:
-    * http://www.refinery29.com/api/content/1/entry
-    * http://www.refinery29.com/api/content/1/entry/1234
-    * http://www.refinery29.com/api/content/1/publisher/magazine/1234
+    * `http://www.refinery29.com/api/content/1/entry`
+    * `http://www.refinery29.com/api/content/1/entry/1234`
+    * `http://www.refinery29.com/api/content/1/publisher/magazine/1234`
 * Verb in URL:
-    * http://www.refinery29.com/api/content/1/magazine/1234/create
+    * `http://www.refinery29.com/api/content/1/magazine/1234/create`
 * Filter outside of query string
-    * http://www.refinery29.com/api/content/1/magazines/2011/desc
+    * `http://www.refinery29.com/api/content/1/magazines/2011/desc`
 
 ## HTTP Verbs
 
