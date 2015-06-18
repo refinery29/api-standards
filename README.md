@@ -341,7 +341,7 @@ GET http://www.refinery29.com/api/content/3/entries/notAValidID
 }
 ```
 
-### Create a a new resource
+### Create a new resource
 
 #### Request
 
