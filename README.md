@@ -252,6 +252,8 @@ Use **offset-based** or **page-based** pagination when the following requirement
 * The db query should skip `page * limit` results and return only `limit` results.
 * Its response should include `prev`, a link where `page` = current `page - 1`.
 * Its response should include `next`, a link where `page` = current `page +1`.
+* Its response should include an empty string for `prev` if there are no previous results
+* Its response should include an empty string for `next` if there are no more results
 
 ### A note on SEO
 
@@ -277,7 +279,7 @@ GET http://www.refinery29.com/api/content/3/entries?limit=10
 200 OK
 
 {
-   "result": [
+   "results": [
    	{ ... JSON Representation of Entry ... },
    	{ ... JSON Representation of Entry ... },
    	{ ... JSON Representation of Entry ... },
@@ -311,7 +313,13 @@ GET http://www.refinery29.com/api/content/3/entries/mRo9YXb3bhlEG52g
 200 OK
 
 {
-   "result": { ... JSON Representation of Entry ... }
+   "results": [
+     { ... JSON Representation of Entry ... }
+   ],
+   "pagination": {
+     "prev": "",
+     "next": ""
+   }
 }
 ```
  
