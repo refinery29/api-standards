@@ -192,7 +192,7 @@ This section borrows heavily from (jsonapi.org)[http://jsonapi.org/format/#error
 
 ## Pagination
 
-We strongly encourage or cursor-based pagination, but understand that your API may need to implement page-based or offset-based pagination, "because reasons".
+We strongly encourage cursor-based pagination, but understand that your API may need to implement page-based or offset-based pagination, "because reasons".
 
 ### Guidelines For All Pagination Types
 
