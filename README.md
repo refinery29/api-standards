@@ -263,22 +263,108 @@ The consumer of paginated results must take special care to ensure every result 
 
 ## Request & Response Examples
 
-**TODO:** Write some of these once we nail the other details down.
+### Retrieve a list of resources
+
+#### Request
+
+```
+GET http://www.refinery29.com/api/content/3/entries?limit=10
+```
+
+#### Response
 
 ```
 200 OK
 
 {
-   'result': [..., ]
-		// metadata .. can include pagination, etc.
+   "result": [
+   	{ ... JSON Representation of Entry ... },
+   	{ ... JSON Representation of Entry ... },
+   	{ ... JSON Representation of Entry ... },
+   	{ ... JSON Representation of Entry ... },
+   	{ ... JSON Representation of Entry ... },
+   	{ ... JSON Representation of Entry ... },
+   	{ ... JSON Representation of Entry ... },
+   	{ ... JSON Representation of Entry ... },
+   	{ ... JSON Representation of Entry ... },
+   	{ ... JSON Representation of Entry ... }
+   ]
+   "pagination": {
+        "prev": "/api/3/content/entries?before=mRo9YXb3bhlEG52g",
+        "next": "/api/3/content/entries?after=cEEHJc5Smh7NCg9m"
+    }
 }
 ```
  
+
+### Retrieve a single resources
+
+#### Request
+
 ```
-401 Bad Request
+GET http://www.refinery29.com/api/content/3/entries/mRo9YXb3bhlEG52g
+```
+
+#### Response
+
+```
+200 OK
+
+{
+   "result": { ... JSON Representation of Entry ... }
+}
+```
+ 
+ 
+### Attempt to retrieve a resource that doesn't exist
+
+#### Request
+
+```
+GET http://www.refinery29.com/api/content/3/entries/notAValidID
+```
+
+#### Response
+
+```
+404 Not Found
  
 {
-   'errors`: [...]
+   "errors": [
+   	{
+   	    "code": "1234",
+   	    "title": "No entry exists for that ID",
+   	    "id": "4eb7d6a6-7e5b-4856-a131-942520f052e6",
+   	    "links": ["http://docs.myapi.com/entries/errors#1234"],
+   	    "detail": "The ID \"notAValidID\" does not represent a valid entry."
+   ]
+}
+```
+
+### Create a new resource
+
+#### Request
+
+```
+POST http://www.refinery29.com/api/content/3/entries
+Content-type: application/json; charset=utf-8 
+
+{
+    "title": "Breaking News...",
+    "text": "Cupcake ipsum dolor sit. Amet donut apple pie. Croissant bear claw toffee halvah sugar plum cake."
+}
+```
+
+#### Response
+
+```
+201 Created
+Location: http://www.refinery29.com/api/content/3/entries/fcp2520f052e6
+
+{
+    "id": "fcp2520f052e6",
+    "title": "Breaking News...",
+    "text": "Cupcake ipsum dolor sit. Amet donut apple pie. Croissant bear claw toffee halvah sugar plum cake."
 }
 ```
 
