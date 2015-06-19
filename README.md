@@ -77,7 +77,7 @@ Going forward, API urls should be in the format:
  * `http://www.refinery29.com/api/content/3/...` # Content API v3
  * `http://www.refinery29.com/api/shops/1/...`
  * `http://www.refinery29.com/api/login/1/...`
- * `https://dash.refinery29.com/api/0/...`
+ * `https://admin.refinery29.com/api/0/...`
     OK to not have namespace with the subdomain.
 
 In the future, we may pursue putting APIs on a subdomain.
