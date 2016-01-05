@@ -15,6 +15,7 @@ If your idea isn't well-formed enough for a PR, feel free to open an Issue on th
 * [Content Type](#content-type)
 * [URL Structure and Versioning](#url-structure-and-versioning)
 * [HTTP Verbs](#http-verbs)
+* [Searching](#searching)
 * [Responses](#responses)
 * [Error Handling](#error-handling)
 * [Pagination](#pagination)
@@ -141,6 +142,12 @@ For images, pay attention to the content type on the request. Allow both:
  * `image/png`, `image/jpeg`: Image data to upload
  * `application/json`: JSON payload with a URL of the image to upload
 
+## Searching
+Search endpoints should be GET requests that contain a `query` parameter.    
+
+| METHOD | ENDPOINT | 
+| ------ | -------- | 
+| GET | /users/search?query=something |
 
 ## Responses
 
