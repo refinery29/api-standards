@@ -19,6 +19,7 @@ If your idea isn't well-formed enough for a PR, feel free to open an Issue on th
 * [Responses](#responses)
 * [Error Handling](#error-handling)
 * [Pagination](#pagination)
+* [Sorting](#sorting)
 * [Request & Response Examples](#request--response-examples)
 * [Mock Responses](#mock-responses)
 * [JSONP](#jsonp)
@@ -267,6 +268,11 @@ The consumer of paginated results must take special care to ensure every result 
 **Put a `rel="nofollow"` element on each page of results.** Create another page that displays ALL results. Allow Google to index that page. Advantage: every result will be indexed. Disadvantage: links will point to the View All page, which will load slowly and require a lot of scrolling.
 
 **Or include`rel="prev"` and `rel="next"` on each page of results.** Google’s bot will follow the links to index each page separately. Advantage: links will point to specific pages, and you won’t have to deal with a monster View All page. Disadvantage: Google’s bot might quit before it gets to the last page of results, so you can’t assume they’ll all be indexed.
+
+## Sorting
+* The API should check for a comma delimited parameter `sort`. : `?sort=column`
+* All sorts are ASC by default
+* To indicate DESC sort, prepend the field by `-`: `?sort=-column1, column2`
 
 ## Request & Response Examples
 
