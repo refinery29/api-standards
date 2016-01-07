@@ -178,6 +178,17 @@ Search endpoints should be GET requests that contain a `query` parameter.
  
  * Metadata should only contain direct properties of the response set, not properties of the members of the response set
 
+## DateTime
+
+DateTime strings should be given in [ISO-8601 Format](https://tools.ietf.org/html/rfc3339)
+
+```
+{
+	"id": 5,
+	"created_at": "2016-02-15T16:31:01Z",
+	"title": "Water Sample"
+}
+```
 
 ## Error handling
 
