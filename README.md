@@ -334,7 +334,7 @@ GET http://www.refinery29.com/api/content/3/entries/mRo9YXb3bhlEG52g
 #### Request
 
 ```
-GET http://www.refinery29.com/api/content/3/entries/notAValidID
+GET http://www.refinery29.com/api/content/3/entries/{Not-A-Valid-ID}
 ```
 
 #### Response
