@@ -89,7 +89,7 @@ In the future, we may pursue putting APIs on a subdomain.
 * List of entries:
     * `GET http://www.refinery29.com/api/content/1/entries`
 * Filtering is a query:
-    * `GET http://www.refinery29.com/api/content/1/entries?year=2011&sort=desc`
+    * `GET http://www.refinery29.com/api/content/1/entries?year=2011&sort=-year`
     * `GET http://www.refinery29.com/api/content/1/entries?topic=economy&year=2011`
 * A single entry in JSON format:
     * `GET http://www.refinery29.com/api/content/1/entries/1234`
