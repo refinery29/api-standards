@@ -214,7 +214,7 @@ We strongly encourage cursor-based pagination, but understand that your API may 
 
 ### Guidelines For All Pagination Types
 
-**DON'T** use the following query params for anything other than pagination: `page`, `offset`, `before`, `after`, `next`, `prev`/`previous`, or `limit`.
+**DON'T** use the following query params for anything other than pagination: `page`, `per-page`, `offset`, `before`, `after`, `next`, `prev`/`previous`, or `limit`.
 
 **DO** include a top-level object named “pagination” and define the following within it:
   * `prev` - a link to the previous page of data.
@@ -267,10 +267,10 @@ Use **offset-based** or **page-based** pagination when the following requirement
 
 #### Implementing Page-based Pagination
 
-* The API should check for integer parameters `page` and `limit`.
-* The db query should skip `page * limit` results and return only `limit` results.
+* The API should check for integer parameters `page` and `per-page`.
+* The db query should skip `(page - 1) * per-page` results and return only `per-page` results.
 * Its response should include `prev`, a link where `page` = current `page - 1`.
-* Its response should include `next`, a link where `page` = current `page +1`.
+* Its response should include `next`, a link where `page` = current `page + 1`.
 
 ### A note on SEO
 
