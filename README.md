@@ -395,11 +395,9 @@ Location: http://www.refinery29.com/api/content/3/entries/fcp2520f052e6
 
 ## Mock Responses
 
-It is suggested that each resource accept a 'mock' parameter on the testing server. Passing `?mock=true` should return a mock data response (bypassing the data store and business logic).
+It is suggested that each GET resource accept a 'mock' parameter. Passing `?mock=true` should return a mock data response (bypassing the data store).
 
 Implementing this feature early in development ensures that the API will exhibit consistent behavior, supporting a test driven development methodology.
-
-**Note:** If the mock parameter is included in a request to the production environment, an error should be raised.
 
 
 ## JSONP
