@@ -44,6 +44,11 @@ These are *pragmatic* guidelines. We think this is the best way for Refinery29 t
    1. You have very good reasons for doing so. You should understand why the guideline you're breaking was put in place, and be able to articulate why that scenario doesn't apply to your situation. If your "break" is an improvement that could apply to all APIs, consider proposing a change to the standards.
    2. Your team has reached a consensus regarding the "break". Deviating from the guidelines isn't something a one or two engineers (even leads or architects!) should do alone.
 
+## General Coding Conventions
+
+* A function that performs validation should **return early** if validation fails. A function that does not perform validation should **return once**.
+
+
 ## RESTful URLs
 
 ### General guidelines for RESTful URLs
